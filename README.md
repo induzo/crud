@@ -1,6 +1,6 @@
 # A little opinionated CRUD interface
 
-[![Documentation](https://godoc.org/github.com/induzo/crud?status.svg)](http://godoc.org/github.com/induzo/crud) [![Go Report Card](https://goreportcard.com/badge/github.com/induzo/crud)](https://goreportcard.com/report/github.com/induzo/crud) [![Maintainability](https://api.codeclimate.com/v1/badges/937d15e44061eeb32877/maintainability)](https://codeclimate.com/github/induzo/crud/maintainability)
+[![Documentation](https://godoc.org/github.com/induzo/crud?status.svg)](http://godoc.org/github.com/induzo/crud) [![Go Report Card](https://goreportcard.com/badge/github.com/induzo/crud)](https://goreportcard.com/report/github.com/induzo/crud) [![Maintainability](https://api.codeclimate.com/v1/badges/937d15e44061eeb32877/maintainability)](https://codeclimate.com/github/induzo/crud/maintainability)[![Coverage Status](https://coveralls.io/repos/github/induzo/crud/badge.svg?branch=master)](https://coveralls.io/github/induzo/crud?branch=master) [![CircleCI](https://circleci.com/gh/induzo/crud.svg?style=svg)](https://circleci.com/gh/induzo/crud)
 
 ## Opinions
 
