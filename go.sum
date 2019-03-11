@@ -16,8 +16,10 @@ github.com/hashicorp/golang-lru v0.5.0 h1:CL2msUPvZTLb5O648aiLNJw3hnBxN2+1Jq8rCO
 github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/hashicorp/golang-lru v0.5.1 h1:0hERBMJE1eitiLkihrMvRVBYAkpHzc/J3QdDN+dAcgU=
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
-github.com/induzo/gohttperror v1.0.0 h1:Ag9+6g58Wh57PVz7JOd+CKRXJ1wps1Xu8U4vO8WqBmY=
-github.com/induzo/gohttperror v1.0.0/go.mod h1:umIHu5HSXGTxNDFysKnSAmmkoLTqrxuIuJDFBK9Etm8=
+github.com/induzo/gohttperror v1.0.1 h1:kyyAfqCDvCz8xu1iG9Kofe4B7aPoWLvdukpLghvXS8w=
+github.com/induzo/gohttperror v1.0.1/go.mod h1:umIHu5HSXGTxNDFysKnSAmmkoLTqrxuIuJDFBK9Etm8=
+github.com/induzo/gohttpmw v1.0.2 h1:5NMEd6rz/gAFO32x8iHweaS/YSatyEOnxvttq+zHlCY=
+github.com/induzo/gohttpmw v1.0.2/go.mod h1:iNGX1XbJVrlVWXhZYg+Gqk+G2mH0Sq7L/4e/xcyjf2g=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2 h1:DB17ag19krx9CFsz4o3enTrPXyIXCl+2iCXH/aMAp9s=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
@@ -47,8 +49,6 @@ github.com/stretchr/testify v1.2.2 h1:bSDNvY7ZPG5RlJ8otE/7V6gMiyenm9RtJ7IUVIAoJ1
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/vincentserpoul/gohttpmw v1.0.1 h1:OdGwTEsdyFpoNClBjUJKRyyHiPwbMnXgm5q5J73bFNc=
-github.com/vincentserpoul/gohttpmw v1.0.1/go.mod h1:h2TjohW4iuhrTik1CTrvgG08IB8G8uJVyHcpcOaUBeU=
 golang.org/x/crypto v0.0.0-20180904163835-0709b304e793 h1:u+LnwYTOOW7Ukr/fppxEb1Nwz0AtPflrblfvUudpo+I=
 golang.org/x/crypto v0.0.0-20180904163835-0709b304e793/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2 h1:VklqNMn3ovrHsnt90PveolxSbWFaJdECFbxSq0Mqo2M=
