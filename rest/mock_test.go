@@ -8,7 +8,7 @@ import (
 
 	"github.com/induzo/crud"
 	"github.com/rs/xid"
-	"github.com/vincentserpoul/gohttperror"
+	"github.com/induzo/gohttperror"
 )
 
 var (

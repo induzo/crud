@@ -10,7 +10,7 @@ import (
 	"github.com/induzo/crud"
 
 	"github.com/go-chi/render"
-	"github.com/vincentserpoul/gohttperror"
+	"github.com/induzo/gohttperror"
 )
 
 // POSTHandler will handle data from request
