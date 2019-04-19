@@ -2,11 +2,12 @@
 
 [![Documentation](https://godoc.org/github.com/induzo/crud?status.svg)](http://godoc.org/github.com/induzo/crud) [![Go Report Card](https://goreportcard.com/badge/github.com/induzo/crud)](https://goreportcard.com/report/github.com/induzo/crud) [![Maintainability](https://api.codeclimate.com/v1/badges/3e4ee9ac6a7a39a18c36/maintainability)](https://codeclimate.com/github/induzo/crud/maintainability) [![Coverage Status](https://coveralls.io/repos/github/induzo/crud/badge.svg?branch=master)](https://coveralls.io/github/induzo/crud?branch=master) [![CircleCI](https://circleci.com/gh/induzo/crud.svg?style=svg)](https://circleci.com/gh/induzo/crud)
 
-## Why would I use it
+## Use case
 
 Let's take a simple use case, you have an entity A, and you want to easily enable a CRUD API.
 
-Simply create a manager for the entity A you want to enable CRUD for, fulfilling the induzo/crud interface:
+Simply create a "manager" fulfilling the induzo/crud MgrI interface for the entity A you want to enable CRUD for.
+This interface (described in mgr.go) is as follows:
 
 ```golang
 type MgrI interface {
@@ -21,6 +22,8 @@ type MgrI interface {
 }
 ```
 
+You can see an example of implementation in the [mock](./mock) folder.
+
 Once this is done, you can just use this newly created manager and wrap it to enable the API.
 
 You want to spawn a REST API with HTTP and JSON, following the std library http handler?
@@ -28,9 +31,13 @@ Easy, just wrap you manager with the [REST implementation in the rest folder](./
 
 And there you go, you have a complete REST API in 5 lines
 
+## Example
+
+A very short example with the rest wrapper in the [example folder](./example).
+
 ## Coming soon
 
-If this interface is successful, we are planning to simply add more implementation the the REST http/json one and maybe generators for:
+If this interface is successful, we are planning to simply add more wrappers on top of the REST http/json one:
 
 - GRPCWeb
 - CQRS
@@ -39,17 +46,3 @@ If this interface is successful, we are planning to simply add more implementati
 
 - Your entity ids should be using github.com/rs/xid
 - Your crud errors should be handlable by an httpresponse
-
-## Benchmarks (i7, 16GB)
-
-```bash
-    goos: linux
-    goarch: amd64
-    pkg: github.com/induzo/crud/rest
-    BenchmarkPOSTHandler-8            300000              4190 ns/op            1912 B/op         20 allocs/op
-    BenchmarkGETListHandler-8         300000              4694 ns/op            2131 B/op         31 allocs/op
-    BenchmarkGETHandler-8             500000              2856 ns/op            1138 B/op         14 allocs/op
-    BenchmarkDELETEHandler-8         3000000               596 ns/op              80 B/op          2 allocs/op
-    BenchmarkPUTHandler-8             300000              4241 ns/op            1842 B/op         21 allocs/op
-    BenchmarkPATCHHandler-8           500000              2772 ns/op            1544 B/op         17 allocs/op
-```

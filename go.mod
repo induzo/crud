@@ -9,7 +9,7 @@ require (
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect
 	github.com/induzo/gohttperror v1.0.1
-	github.com/induzo/gohttpmw v1.0.2 // indirect
+	github.com/induzo/gohttpmw v1.0.1 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/rs/xid v1.2.1

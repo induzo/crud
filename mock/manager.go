@@ -1,4 +1,4 @@
-package rest
+package mock
 
 import (
 	"context"
@@ -7,8 +7,8 @@ import (
 	"io"
 
 	"github.com/induzo/crud"
-	"github.com/rs/xid"
 	"github.com/induzo/gohttperror"
+	"github.com/rs/xid"
 )
 
 var (
@@ -20,53 +20,47 @@ var (
 	ErrForbidden = errors.New("forbidden")
 )
 
-// mgrMock is a mock for the mgr interface
-type mgrMock struct {
-	wantCreateError        bool
-	wantDeleteError        bool
-	wantGetError           bool
-	wantGetListError       bool
-	wantUpdateError        bool
-	wantPartialUpdateError bool
-	EntityList             map[xid.ID]*entityMock
+// Mgr is a mock for the mgr interface
+type Mgr struct {
+	WantCreateError        bool
+	WantDeleteError        bool
+	WantGetError           bool
+	WantGetListError       bool
+	WantUpdateError        bool
+	WantPartialUpdateError bool
+	EntityList             map[xid.ID]*Entity
 }
 
-// entityMock is respecting the CRUD interface
-type entityMock struct {
-	ID       xid.ID `json:"id"`
-	StatusID int    `json:"status_id"`
-}
-
-func newMgrMock() *mgrMock {
-	return &mgrMock{
-		EntityList: make(map[xid.ID]*entityMock),
+func NewMgr() *Mgr {
+	return &Mgr{
+		EntityList: make(map[xid.ID]*Entity),
 	}
 }
 
-func (m *mgrMock) NewEmptyEntity() interface{} {
-	return &entityMock{}
+func (m *Mgr) NewEmptyEntity() interface{} {
+	return &Entity{}
 }
 
-func (m *mgrMock) Create(
+func (m *Mgr) Create(
 	ctx context.Context,
 	e interface{},
 	pl io.Reader,
 ) (interface{}, error) {
-	if m.wantCreateError {
+	if m.WantCreateError {
 		return nil, fmt.Errorf("Error create")
 	}
-	ec, ok := e.(*entityMock)
+	ec, ok := e.(*Entity)
 	if !ok {
 		return nil,
-			fmt.Errorf("mgrMock Create: impossible to cast e to entityMock")
+			fmt.Errorf("Mgr Create: impossible to cast e to Entity")
 	}
 	ec.ID = xid.New()
 	m.EntityList[ec.ID] = ec
 	return ec, nil
 }
 
-func (m *mgrMock) Delete(ctx context.Context, id xid.ID) error {
-	if m.wantDeleteError {
+func (m *Mgr) Delete(ctx context.Context, id xid.ID) error {
+	if m.WantDeleteError {
 		return fmt.Errorf("Error delete")
 	}
 	if _, ok := m.EntityList[id]; !ok {
@@ -77,8 +71,8 @@ func (m *mgrMock) Delete(ctx context.Context, id xid.ID) error {
 	return nil
 }
 
-func (m *mgrMock) Get(ctx context.Context, id xid.ID) (interface{}, error) {
-	if m.wantGetError {
+func (m *Mgr) Get(ctx context.Context, id xid.ID) (interface{}, error) {
+	if m.WantGetError {
 		return nil, fmt.Errorf("Error get")
 	}
 	if ent, ok := m.EntityList[id]; ok {
@@ -87,18 +81,18 @@ func (m *mgrMock) Get(ctx context.Context, id xid.ID) (interface{}, error) {
 	return nil, ErrNotFound
 }
 
-func (m *mgrMock) GetList(
+func (m *Mgr) GetList(
 	context.Context,
 	crud.ListModifiers,
 ) (interface{}, error) {
-	if m.wantGetListError {
+	if m.WantGetListError {
 		return nil, fmt.Errorf("Error getlist")
 	}
 	if len(m.EntityList) == 0 {
 		return nil, ErrNotFound
 	}
 
-	v := make([]*entityMock, 0, len(m.EntityList))
+	v := make([]*Entity, 0, len(m.EntityList))
 	for _, value := range m.EntityList {
 		v = append(v, value)
 	}
@@ -106,13 +100,13 @@ func (m *mgrMock) GetList(
 	return v, nil
 }
 
-func (m *mgrMock) Update(
+func (m *Mgr) Update(
 	ctx context.Context,
 	id xid.ID,
 	newE interface{},
 	pl io.Reader,
 ) (interface{}, error) {
-	if m.wantUpdateError {
+	if m.WantUpdateError {
 		return nil, fmt.Errorf("Error update")
 	}
 	_, ok := m.EntityList[id]
@@ -120,7 +114,7 @@ func (m *mgrMock) Update(
 		return nil, ErrNotFound
 	}
 
-	newEC, okC := newE.(*entityMock)
+	newEC, okC := newE.(*Entity)
 	if !okC {
 		return ErrBadRequest, nil
 	}
@@ -128,13 +122,13 @@ func (m *mgrMock) Update(
 	return newEC, nil
 }
 
-func (m *mgrMock) PartialUpdate(
+func (m *Mgr) PartialUpdate(
 	ctx context.Context,
 	id xid.ID,
 	pud crud.PartialUpdateData,
 	pl io.Reader,
 ) error {
-	if m.wantPartialUpdateError {
+	if m.WantPartialUpdateError {
 		return fmt.Errorf("Error partial update")
 	}
 	if _, ok := pud["status_id"]; !ok {
@@ -149,7 +143,7 @@ func (m *mgrMock) PartialUpdate(
 	return nil
 }
 
-func (m *mgrMock) MapErrorToHTTPError(e error) *gohttperror.ErrResponse {
+func (m *Mgr) MapErrorToHTTPError(e error) *gohttperror.ErrResponse {
 	switch e {
 	case ErrNotFound:
 		return gohttperror.ErrNotFound
