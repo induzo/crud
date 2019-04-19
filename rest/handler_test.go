@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/induzo/crud/mock"
 	"github.com/rs/xid"
 )
 
@@ -37,14 +38,14 @@ func TestPOSTHandler(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := newMgrMock()
-			e := m.NewEmptyEntity().(*entityMock)
+			m := mock.NewMgr()
+			e := m.NewEmptyEntity().(*mock.Entity)
 			e.StatusID = 1
 			payload, _ := json.Marshal(e)
 			if tt.withPayloadError {
 				payload = payload[1:]
 			}
-			m.wantCreateError = tt.withCreateError
+			m.WantCreateError = tt.withCreateError
 
 			rr := httptest.NewRecorder()
 			req := httptest.NewRequest(
@@ -63,7 +64,7 @@ func TestPOSTHandler(t *testing.T) {
 			}
 
 			if resp.StatusCode == http.StatusOK {
-				entx := &entityMock{}
+				entx := &mock.Entity{}
 				_ = json.NewDecoder(resp.Body).Decode(entx)
 				if entx.StatusID != 1 {
 					t.Errorf("POSTHandler wasn't created properly")
@@ -74,8 +75,8 @@ func TestPOSTHandler(t *testing.T) {
 }
 
 func BenchmarkPOSTHandler(b *testing.B) {
-	m := newMgrMock()
-	payload, _ := json.Marshal(&entityMock{})
+	m := mock.NewMgr()
+	payload, _ := json.Marshal(&mock.Entity{})
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
@@ -113,14 +114,14 @@ func TestGETListHandler(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			m := newMgrMock()
-			e := m.NewEmptyEntity().(*entityMock)
+			m := mock.NewMgr()
+			e := m.NewEmptyEntity().(*mock.Entity)
 			if !tt.withEmptyList {
 				for i := 0; i < 5; i++ {
 					_, _ = m.Create(ctx, e, bytes.NewReader([]byte{}))
 				}
 			}
-			m.wantGetListError = tt.withGetListError
+			m.WantGetListError = tt.withGetListError
 
 			rr := httptest.NewRecorder()
 			req := httptest.NewRequest(
@@ -138,7 +139,7 @@ func TestGETListHandler(t *testing.T) {
 			}
 
 			if resp.StatusCode == http.StatusOK {
-				type em []*entityMock
+				type em []*mock.Entity
 				entx := em{}
 				if err := json.NewDecoder(resp.Body).Decode(&entx); err != nil {
 					t.Errorf("GETListHandler: %v", err)
@@ -155,8 +156,8 @@ func TestGETListHandler(t *testing.T) {
 
 func BenchmarkGETListHandler(b *testing.B) {
 	ctx := context.Background()
-	m := newMgrMock()
-	e := m.NewEmptyEntity().(*entityMock)
+	m := mock.NewMgr()
+	e := m.NewEmptyEntity().(*mock.Entity)
 	for i := 0; i < 5; i++ {
 		_, _ = m.Create(ctx, e, bytes.NewReader([]byte{}))
 	}
@@ -205,19 +206,19 @@ func TestGETHandler(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			m := newMgrMock()
-			e := m.NewEmptyEntity().(*entityMock)
-			ecc := &entityMock{}
+			m := mock.NewMgr()
+			e := m.NewEmptyEntity().(*mock.Entity)
+			ecc := &mock.Entity{}
 			reqID := xid.New()
 			if !tt.withEmpty {
 				ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-				ecc = ec.(*entityMock)
+				ecc = ec.(*mock.Entity)
 				reqID = ecc.ID
 			}
 			if tt.withBadID {
 				reqID = xid.ID{}
 			}
-			m.wantGetError = tt.withGetError
+			m.WantGetError = tt.withGetError
 
 			rr := httptest.NewRecorder()
 			req := httptest.NewRequest(
@@ -238,7 +239,7 @@ func TestGETHandler(t *testing.T) {
 			}
 
 			if resp.StatusCode == http.StatusOK {
-				entx := entityMock{}
+				entx := mock.Entity{}
 				if err := json.NewDecoder(resp.Body).Decode(&entx); err != nil {
 					t.Errorf("GETHandler: %v", err)
 					return
@@ -253,10 +254,10 @@ func TestGETHandler(t *testing.T) {
 
 func BenchmarkGETHandler(b *testing.B) {
 	ctx := context.Background()
-	m := newMgrMock()
-	e := m.NewEmptyEntity().(*entityMock)
+	m := mock.NewMgr()
+	e := m.NewEmptyEntity().(*mock.Entity)
 	ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-	ecc := ec.(*entityMock)
+	ecc := ec.(*mock.Entity)
 	reqID := ecc.ID
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -304,18 +305,18 @@ func TestDELETEHandler(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			m := newMgrMock()
-			e := m.NewEmptyEntity().(*entityMock)
+			m := mock.NewMgr()
+			e := m.NewEmptyEntity().(*mock.Entity)
 			reqID := xid.New()
 			if !tt.withEmpty {
 				ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-				ecc := ec.(*entityMock)
+				ecc := ec.(*mock.Entity)
 				reqID = ecc.ID
 			}
 			if tt.withBadID {
 				reqID = xid.ID{}
 			}
-			m.wantDeleteError = tt.withDeleteError
+			m.WantDeleteError = tt.withDeleteError
 
 			rr := httptest.NewRecorder()
 			req := httptest.NewRequest(
@@ -346,13 +347,13 @@ func TestDELETEHandler(t *testing.T) {
 
 func BenchmarkDELETEHandler(b *testing.B) {
 	ctx := context.Background()
-	m := newMgrMock()
+	m := mock.NewMgr()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
-		e := m.NewEmptyEntity().(*entityMock)
+		e := m.NewEmptyEntity().(*mock.Entity)
 		ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-		ecc := ec.(*entityMock)
+		ecc := ec.(*mock.Entity)
 		reqID := ecc.ID
 		rr := httptest.NewRecorder()
 		req := httptest.NewRequest(
@@ -403,12 +404,12 @@ func TestPUTHandler(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			m := newMgrMock()
-			e := m.NewEmptyEntity().(*entityMock)
+			m := mock.NewMgr()
+			e := m.NewEmptyEntity().(*mock.Entity)
 			reqID := xid.New()
 			if !tt.withEmpty {
 				ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-				ecc := ec.(*entityMock)
+				ecc := ec.(*mock.Entity)
 				reqID = ecc.ID
 			}
 			if tt.withBadID {
@@ -419,7 +420,7 @@ func TestPUTHandler(t *testing.T) {
 			if tt.withPayloadError {
 				payload = payload[1:]
 			}
-			m.wantUpdateError = tt.withUpdateError
+			m.WantUpdateError = tt.withUpdateError
 
 			rr := httptest.NewRecorder()
 			req := httptest.NewRequest(
@@ -439,7 +440,7 @@ func TestPUTHandler(t *testing.T) {
 			}
 
 			if resp.StatusCode == http.StatusOK {
-				entx := &entityMock{}
+				entx := &mock.Entity{}
 				_ = json.NewDecoder(resp.Body).Decode(entx)
 				if entx.StatusID != 2 {
 					t.Errorf("PUTHandler didn't update properly")
@@ -451,10 +452,10 @@ func TestPUTHandler(t *testing.T) {
 
 func BenchmarkPUTHandler(b *testing.B) {
 	ctx := context.Background()
-	m := newMgrMock()
-	e := m.NewEmptyEntity().(*entityMock)
+	m := mock.NewMgr()
+	e := m.NewEmptyEntity().(*mock.Entity)
 	ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-	ecc := ec.(*entityMock)
+	ecc := ec.(*mock.Entity)
 	reqID := ecc.ID
 	e.StatusID = 2
 	payload, _ := json.Marshal(e)
@@ -509,12 +510,12 @@ func TestPATCHHandler(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
-			m := newMgrMock()
-			e := m.NewEmptyEntity().(*entityMock)
+			m := mock.NewMgr()
+			e := m.NewEmptyEntity().(*mock.Entity)
 			reqID := xid.New()
 			if !tt.withEmpty {
 				ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-				ecc := ec.(*entityMock)
+				ecc := ec.(*mock.Entity)
 				reqID = ecc.ID
 			}
 			if tt.withBadID {
@@ -524,7 +525,7 @@ func TestPATCHHandler(t *testing.T) {
 			if tt.withPayloadError {
 				payload = payload[1:]
 			}
-			m.wantPartialUpdateError = tt.withPartialUpdateError
+			m.WantPartialUpdateError = tt.withPartialUpdateError
 
 			rr := httptest.NewRecorder()
 			req := httptest.NewRequest(
@@ -544,7 +545,7 @@ func TestPATCHHandler(t *testing.T) {
 			}
 
 			if resp.StatusCode == http.StatusOK {
-				entx := &entityMock{}
+				entx := &mock.Entity{}
 				_ = json.NewDecoder(resp.Body).Decode(entx)
 				if entx.StatusID != 2 {
 					t.Errorf("PATCHHandler didn't update properly")
@@ -556,10 +557,10 @@ func TestPATCHHandler(t *testing.T) {
 
 func BenchmarkPATCHHandler(b *testing.B) {
 	ctx := context.Background()
-	m := newMgrMock()
-	e := m.NewEmptyEntity().(*entityMock)
+	m := mock.NewMgr()
+	e := m.NewEmptyEntity().(*mock.Entity)
 	ec, _ := m.Create(ctx, e, bytes.NewReader([]byte{}))
-	ecc := ec.(*entityMock)
+	ecc := ec.(*mock.Entity)
 	reqID := ecc.ID
 	payload := []byte(`{"status_id": 2}`)
 	b.ResetTimer()
