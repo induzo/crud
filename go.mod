@@ -3,7 +3,7 @@ module github.com/induzo/crud
 go 1.12
 
 require (
-	github.com/go-chi/chi v4.1.0+incompatible
+	github.com/go-chi/chi v4.1.1+incompatible
 	github.com/go-chi/render v1.0.1
 	github.com/golang/mock v1.2.0 // indirect
 	github.com/google/uuid v1.1.1 // indirect
