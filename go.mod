@@ -17,8 +17,6 @@ require (
 	github.com/rs/zerolog v1.14.0 // indirect
 	github.com/segmentio/ksuid v1.0.2 // indirect
 	github.com/sirupsen/logrus v1.4.1 // indirect
-	github.com/stretchr/objx v0.2.0 // indirect
-	golang.org/x/crypto v0.0.0-20190418165655-df01cb2cc480 // indirect
-	golang.org/x/net v0.0.0-20190420063019-afa5a82059c6 // indirect
+	github.com/stretchr/testify v1.3.0 // indirect
 	golang.org/x/sys v0.0.0-20190419153524-e8e3143a4f4a // indirect
 )
