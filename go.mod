@@ -11,7 +11,7 @@ require (
 	github.com/induzo/gohttperror v1.0.1
 	github.com/induzo/gohttpmw v1.0.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rs/xid v1.2.1
+	github.com/rs/xid v1.3.0
 	github.com/segmentio/ksuid v1.0.3 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect
 )
